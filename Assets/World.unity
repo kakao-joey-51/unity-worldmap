@@ -143,7 +143,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 596f833c9444249c6acb3cf96c6b058a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6810
+      value: 6815
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 596f833c9444249c6acb3cf96c6b058a,
         type: 3}
@@ -185,7 +185,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ship
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 3451118302482216456, guid: 596f833c9444249c6acb3cf96c6b058a,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3451118302482216456, guid: 596f833c9444249c6acb3cf96c6b058a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3451118302482216456, guid: 596f833c9444249c6acb3cf96c6b058a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -425,9 +436,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Interpolate: 1
+  m_Constraints: 80
+  m_CollisionDetection: 1
 --- !u!114 &606032451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,8 +451,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96bea26ee95e4bdeaa1eab3d21d5401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  turnSpeed: 10
+  moveForce: 1000
+  turnTorque: 500
 --- !u!65 &606032452
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -449,7 +460,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 606032446}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f4ec3143a8aaefd4e98aa7a9a1bb0c1d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -461,7 +472,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.004649667, y: 0.009161823, z: 0.01}
+  m_Size: {x: 0.007, y: 0.01, z: 0.015}
   m_Center: {x: 0, y: 0.0045809117, z: -2.351703e-17}
 --- !u!1 &1259114764
 GameObject:
@@ -593,7 +604,7 @@ TerrainCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1318785505}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: cd65a8cdb204e6f4bae2099e74411327, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -655,7 +666,7 @@ Transform:
   m_GameObject: {fileID: 1318785505}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -10, z: 0}
+  m_LocalPosition: {x: 0, y: -20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -794,7 +805,7 @@ Transform:
   m_GameObject: {fileID: 1771454270}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00000003774895, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 7040, y: 0.99999976, z: 6806.5}
+  m_LocalPosition: {x: 7040, y: 0.99999976, z: 6811.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

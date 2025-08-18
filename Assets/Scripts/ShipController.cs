@@ -2,33 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 이 스크립트는 Rigidbody 컴포넌트가 반드시 필요함을 명시합니다.
+// 만약 Rigidbody가 없으면 자동으로 추가해줍니다.
+[RequireComponent(typeof(Rigidbody))]
 public class ShipController : MonoBehaviour
 {
-    // 인스펙터 창에서 배의 전진/후진 속도를 조절할 수 있습니다.
-    public float moveSpeed = 5.0f;
+    // 인스펙터 창에서 배에 가할 전진/후진 힘의 크기를 조절합니다.
+    [Header("Movement Settings")]
+    public float moveForce = 500f; // '속도'가 아닌 '힘'이므로 기존보다 훨씬 큰 값이 필요할 수 있습니다.
 
-    // 인스펙터 창에서 배의 회전 속도를 조절할 수 있습니다.
-    public float turnSpeed = 50.0f;
+    // 인스펙터 창에서 배에 가할 회전 힘(토크)의 크기를 조절합니다.
+    public float turnTorque = 250f;
 
-    // 매 프레임마다 호출되는 함수입니다.
+    // 물리 효과 제어를 위한 Rigidbody 컴포넌트 변수
+    private Rigidbody rb;
+
+    // 사용자 입력을 저장할 변수
+    private float verticalInput;
+    private float horizontalInput;
+
+    // 게임이 시작될 때 한 번 호출되는 함수입니다.
+    void Start()
+    {
+        // 이 스크립트가 붙어있는 게임 오브젝트에서 Rigidbody 컴포넌트를 찾아 rb 변수에 할당합니다.
+        rb = GetComponent<Rigidbody>();
+    }
+
+    // 매 프레임마다 호출되는 함수입니다. 주로 입력을 받는 데 사용합니다.
     void Update()
     {
         // 1. 전진과 후진 입력 받기 (W, S 키 또는 위/아래 방향키)
-        // GetAxis("Vertical")은 W나 위 방향키를 누르면 1, S나 아래 방향키를 누르면 -1에 가까운 값을 반환합니다.
-        float verticalInput = Input.GetAxis("Vertical");
+        verticalInput = Input.GetAxis("Vertical");
 
         // 2. 좌회전과 우회전 입력 받기 (A, D 키 또는 왼쪽/오른쪽 방향키)
-        // GetAxis("Horizontal")은 D나 오른쪽 방향키를 누르면 1, A나 왼쪽 방향키를 누르면 -1에 가까운 값을 반환합니다.
-        float horizontalInput = Input.GetAxis("Horizontal");
+        horizontalInput = Input.GetAxis("Horizontal");
+    }
 
-        // 3. 입력 값에 따라 배를 이동시키기
-        // transform.forward는 배의 앞쪽 방향을 나타내는 벡터입니다.
-        // 여기에 속도와 입력값, 그리고 프레임 간 시간차(Time.deltaTime)를 곱해 이동 거리를 계산합니다.
-        // Time.deltaTime을 곱해주는 이유는 컴퓨터 성능과 상관없이 일정한 속도로 움직이게 하기 위함입니다.
-        transform.Translate(Vector3.forward * verticalInput * moveSpeed * Time.deltaTime);
+    // 고정된 시간 간격으로 호출되는 함수입니다. 물리 계산은 여기서 해야 안정적입니다.
+    void FixedUpdate()
+    {
+        // 3. 입력 값에 따라 배에 전진/후진 힘을 가하기
+        // AddRelativeForce는 배가 바라보는 방향(로컬 좌표계)을 기준으로 힘을 가합니다.
+        // Vector3.forward는 배의 '앞쪽' 방향입니다.
+        // ForceMode.Force는 질량(Mass)을 고려하여 힘을 가합니다.
+        if (Mathf.Abs(verticalInput) > 0.1f) // 약간의 입력에도 반응하도록
+        {
+            rb.AddRelativeForce(Vector3.forward * verticalInput * moveForce * Time.fixedDeltaTime);
+        }
 
-        // 4. 입력 값에 따라 배를 회전시키기
-        // Vector3.up은 Y축(위쪽 방향)을 기준으로 회전하겠다는 의미입니다.
-        transform.Rotate(Vector3.up * horizontalInput * turnSpeed * Time.deltaTime);
+        // 4. 입력 값에 따라 배를 회전시키는 힘(토크)을 가하기
+        // AddTorque는 특정 축을 기준으로 회전력을 가합니다.
+        // Vector3.up은 Y축(수직축)을 기준으로 회전하겠다는 의미입니다.
+        if (Mathf.Abs(horizontalInput) > 0.1f)
+        {
+            rb.AddTorque(Vector3.up * horizontalInput * turnTorque * Time.fixedDeltaTime);
+        }
     }
 }

@@ -23,6 +23,8 @@ public class ShipController : MonoBehaviour
     [SerializeField] private Rigidbody rb;
 
     [SerializeField] private BoxCollider boxCol;
+    
+    private int terrainLayerId; // 터레인 레이어 ID를 저장할 변수
 
     // 사용자 입력을 저장할 변수
     private float verticalInput;
@@ -43,7 +45,8 @@ public class ShipController : MonoBehaviour
             boxCol = gameObject.AddComponent<BoxCollider>();
         }
 
-        boxCol.size = new Vector3(0.01f, 0.01f, 0.01f);
+        boxCol.size = new Vector3(0.01f, 0.01f, 0.01f);        
+        terrainLayerId = LayerMask.NameToLayer("Terrain");
     }
 
     // 게임이 시작될 때 한 번 호출되는 함수입니다.
@@ -88,4 +91,25 @@ public class ShipController : MonoBehaviour
             rb.AddTorque(Vector3.up * horizontalInput * turnTorque * Time.fixedDeltaTime);
         }
     }
+
+    //public float pushBackForce = 5f; // 인스펙터에서 조절 가능한 반발력 변수 추가
+    /// <summary>
+    /// 다른 콜라이더와 물리적 충돌이 시작될 때 호출되는 함수입니다.
+    /// </summary>
+    /// <param name="collision">충돌에 대한 정보를 담고 있는 Collision 객체</param>
+    private void OnCollisionEnter(Collision collision)
+    {
+        // --- 태그 비교 대신 레이어 ID로 비교합니다. ---
+        if (collision.gameObject.layer == terrainLayerId)
+        {
+            Debug.Log("터레인과 충돌했습니다! (레이어 감지)");
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+
+            //Vector3 pushDirection = -collision.relativeVelocity.normalized;
+            //pushDirection.y = 0;
+            //rb.AddForce(pushDirection * pushBackForce, ForceMode.Impulse);
+        }
+    }
+
 }

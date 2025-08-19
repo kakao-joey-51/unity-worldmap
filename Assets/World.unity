@@ -482,6 +482,7 @@ MonoBehaviour:
   angularVelocity: 1.5
   rb: {fileID: 0}
   boxCol: {fileID: 0}
+  pushBackForce: 0
 --- !u!65 &606032452
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -571,7 +572,7 @@ GameObject:
   - component: {fileID: 1318785508}
   - component: {fileID: 1318785507}
   - component: {fileID: 1318785506}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}

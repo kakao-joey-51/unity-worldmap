@@ -7,12 +7,17 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class ShipController : MonoBehaviour
 {
+    [Header("Cam Controller")]
+    public SimpleCameraFollower camController;
+
     // 인스펙터 창에서 배에 가할 전진/후진 힘의 크기를 조절합니다.
     [Header("Movement Settings")]
     public float moveForce = 500f; // '속도'가 아닌 '힘'이므로 기존보다 훨씬 큰 값이 필요할 수 있습니다.
 
     // 인스펙터 창에서 배에 가할 회전 힘(토크)의 크기를 조절합니다.
     public float turnTorque = 250f;
+
+    public float angularVelocity = 1.5f; // 최대 각속도 제한, 이 값은 테스트하며 조절합니다. 이후 선박별로 값이 다를 수 있을 것이다.
 
     // 물리 효과 제어를 위한 Rigidbody 컴포넌트 변수
     [SerializeField] private Rigidbody rb;
@@ -26,10 +31,11 @@ public class ShipController : MonoBehaviour
     //본 스크립트가 달려있는 오브젝트가 활성화 될때 최초 1회 호출, start보다 빠르다.
     private void Awake()
     {
-        Debug.LogError("Awake");
         // 이 스크립트가 붙어있는 게임 오브젝트에서 Rigidbody 컴포넌트를 찾아 rb 변수에 할당합니다.
         if (rb == null) { rb = GetComponent<Rigidbody>(); }
-        
+
+        rb.maxAngularVelocity = angularVelocity;
+
         boxCol = GetComponent<BoxCollider>();
 
         if (boxCol == null)
@@ -53,6 +59,13 @@ public class ShipController : MonoBehaviour
 
         // 2. 좌회전과 우회전 입력 받기 (A, D 키 또는 왼쪽/오른쪽 방향키)
         horizontalInput = Input.GetAxis("Horizontal");
+    }
+
+    //LateUpdate는 매 프레임이 끝나기 전 가장 마지막에 1번 호출된다. 물리 연산과 달리 주로 카메라 위치 보정에 쓰인다.
+    private void LateUpdate()
+    {
+        float deltaTime = Time.deltaTime;
+        camController?.UpdateElapsedTime(deltaTime);
     }
 
     // 고정된 시간 간격으로 호출되는 함수입니다. 물리 계산은 여기서 해야 안정적입니다.

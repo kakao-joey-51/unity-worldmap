@@ -35,8 +35,9 @@ public class ShipController : MonoBehaviour
         if (boxCol == null)
         {
             boxCol = gameObject.AddComponent<BoxCollider>();
-            boxCol.size = new Vector3(0.01f, 0.01f, 0.01f);
         }
+
+        boxCol.size = new Vector3(0.01f, 0.01f, 0.01f);
     }
 
     // 게임이 시작될 때 한 번 호출되는 함수입니다.

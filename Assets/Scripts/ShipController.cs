@@ -15,17 +15,33 @@ public class ShipController : MonoBehaviour
     public float turnTorque = 250f;
 
     // 물리 효과 제어를 위한 Rigidbody 컴포넌트 변수
-    private Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
+
+    [SerializeField] private BoxCollider boxCol;
 
     // 사용자 입력을 저장할 변수
     private float verticalInput;
     private float horizontalInput;
 
+    //본 스크립트가 달려있는 오브젝트가 활성화 될때 최초 1회 호출, start보다 빠르다.
+    private void Awake()
+    {
+        Debug.LogError("Awake");
+        // 이 스크립트가 붙어있는 게임 오브젝트에서 Rigidbody 컴포넌트를 찾아 rb 변수에 할당합니다.
+        if (rb == null) { rb = GetComponent<Rigidbody>(); }
+        
+        boxCol = GetComponent<BoxCollider>();
+
+        if (boxCol == null)
+        {
+            boxCol = gameObject.AddComponent<BoxCollider>();
+            boxCol.size = new Vector3(0.01f, 0.01f, 0.01f);
+        }
+    }
+
     // 게임이 시작될 때 한 번 호출되는 함수입니다.
     void Start()
-    {
-        // 이 스크립트가 붙어있는 게임 오브젝트에서 Rigidbody 컴포넌트를 찾아 rb 변수에 할당합니다.
-        rb = GetComponent<Rigidbody>();
+    {        
     }
 
     // 매 프레임마다 호출되는 함수입니다. 주로 입력을 받는 데 사용합니다.

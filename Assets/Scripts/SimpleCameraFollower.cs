@@ -1,9 +1,9 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// °£´ÜÇÏ°Ô target Æ®·£½ºÆûÀ» µû¶ó ´Ù´Ï´Â ½ºÅ©¸³Æ®·Î, ÀÌÈÄ ¸¶¿ì½º ÀÎÇ²À¸·Î ÁÜ È®´ë µîÀ» ÇÒ ¶§ distance, height°ª + ³ª¾Æ°¡¼­ Ä«¸Ş¶óÀÇ pov°ª µîÀ» Á¦¾îÇÏ´Â ½ÄÀ¸·Î ¼öÁ¤ °¡´ÉÇÒ °ÍÀÌ´Ù.
+/// ê°„ë‹¨í•˜ê²Œ target íŠ¸ëœìŠ¤í¼ì„ ë”°ë¼ ë‹¤ë‹ˆëŠ” ìŠ¤í¬ë¦½íŠ¸ë¡œ, ì´í›„ ë§ˆìš°ìŠ¤ ì¸í’‹ìœ¼ë¡œ ì¤Œ í™•ëŒ€ ë“±ì„ í•  ë•Œ distance, heightê°’ + ë‚˜ì•„ê°€ì„œ ì¹´ë©”ë¼ì˜ povê°’ ë“±ì„ ì œì–´í•˜ëŠ” ì‹ìœ¼ë¡œ ìˆ˜ì • ê°€ëŠ¥í•  ê²ƒì´ë‹¤.
 /// </summary>
 public class SimpleCameraFollower : MonoBehaviour
 {
@@ -12,8 +12,8 @@ public class SimpleCameraFollower : MonoBehaviour
 
     public float distance = 5f;           // The distance in the x-z plane to the target
     public float height = 1.5f;           // the height we want the camera to be above the target
-    public float rotationDamping = 12.0f; // Ä«¸Ş¶ó °¢µµ º¯°æ ½Ã °¨¼â°ª
-    public float heightDamping = 2.0f;    // Ä«¸Ş¶ó ³ôÀÌ º¯°æ ½Ã °¨¼â°ª
+    public float rotationDamping = 12.0f; // ì¹´ë©”ë¼ ê°ë„ ë³€ê²½ ì‹œ ê°ì‡„ê°’
+    public float heightDamping = 2.0f;    // ì¹´ë©”ë¼ ë†’ì´ ë³€ê²½ ì‹œ ê°ì‡„ê°’
 
     public void UpdateElapsedTime(float deltaTime)
     {

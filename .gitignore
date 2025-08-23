@@ -100,3 +100,6 @@ InitTestScene*.unity*
 
 # mac
 .DS_Store
+
+# Map raw data
+Assets/Terrains/

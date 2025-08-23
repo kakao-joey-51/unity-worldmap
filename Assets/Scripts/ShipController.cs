@@ -45,7 +45,7 @@ public class ShipController : MonoBehaviour
             boxCol = gameObject.AddComponent<BoxCollider>();
         }
 
-        boxCol.size = new Vector3(0.01f, 0.01f, 0.01f);        
+        //boxCol.size = new Vector3(0.01f, 0.01f, 0.01f);        
         terrainLayerId = LayerMask.NameToLayer("Terrain");
     }
 

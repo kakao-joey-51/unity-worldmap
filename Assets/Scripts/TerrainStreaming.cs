@@ -26,8 +26,8 @@ namespace CAU
         public bool useAsyncLoading = true; // 비동기 로딩 사용
         
         [Header("Terrain Size Settings")]
-        [Range(0.1f, 10.0f)]
-        public float terrainHeight = 1.0f; // 지형 높이 (Unity 단위)
+        [Range(0.1f, 1000.0f)]
+        public float terrainHeight = 100.0f; // 지형 높이 (Unity 단위)
         
         
         // 프라이빗 변수들
@@ -221,15 +221,15 @@ namespace CAU
         {
             GameObject terrainGO = null;
             
-            // 1차: TerrainData asset에서 로드 시도
-            string assetName = $"TerrainData_{tileIndex.x}_{tileIndex.y}";
-            string resourcesPath = $"TerrainData/{assetName}";
+            // 1차: Terrains asset에서 로드 시도
+            string assetName = $"Terrain_{tileIndex.x}_{tileIndex.y}";
+            string resourcesPath = $"Terrains/{assetName}";
             TerrainData terrainData = Resources.Load<TerrainData>(resourcesPath);
             
             if (terrainData != null)
             {
                 // TerrainData asset으로부터 로드
-                Vector3 newSize = new Vector3(1.113f, terrainHeight, 1.113f);
+                Vector3 newSize = new Vector3(1113f, terrainHeight, 1113f);
                 terrainData.size = newSize;
                 
                 terrainGO = Terrain.CreateTerrainGameObject(terrainData);
@@ -252,7 +252,7 @@ namespace CAU
                         Terrain terrain = terrainGO.GetComponent<Terrain>();
                         if (terrain != null && terrain.terrainData != null)
                         {
-                            Vector3 newSize = new Vector3(1.113f, terrainHeight, 1.113f);
+                            Vector3 newSize = new Vector3(1113f, terrainHeight, 1113f);
                             terrain.terrainData.size = newSize;
                         }
                         Debug.Log($"RAW에서 타일 로드: {rawFileName}");
@@ -267,7 +267,7 @@ namespace CAU
                 Vector3 worldPosition = GetWorldPositionFromTile(tileIndex.x, tileIndex.y);
                 
                 // 해수면 높이 보정
-                float seaLevelOffset = (32768f / 65535f) * terrainHeight;
+                float seaLevelOffset = (32768f / 65535f) * terrainHeight * 0.9999f;
                 worldPosition.y = -seaLevelOffset;
                 
                 terrainGO.transform.position = worldPosition;
@@ -390,7 +390,7 @@ namespace CAU
         {
             float terrainWidthKm = 1113f;  // 경도 10도 (적도 기준)  
             float terrainHeightKm = 1113f; // 위도 10도 - X축과 동일하게 설정하여 정사각형 타일
-            float unityScaleFactor = 0.001f; // 1km = 1 Unity unit
+            float unityScaleFactor = 1.0f; // 1km = 1 Unity unit
             
             // WGS84 좌표계 기준
             // tile_0_0: -180°, 90° (서쪽 끝, 북극)

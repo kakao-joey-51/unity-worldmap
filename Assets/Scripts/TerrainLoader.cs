@@ -18,7 +18,7 @@ namespace CAU
         public float maxElevationM = 8000f; // 최대 고도 (미터) - 더 부드러운 지형을 위해 줄임
         
         // Unity 내부 스케일 (실제 크기를 Unity 단위로 변환)
-        private float unityScaleFactor = 0.001f; // 1km = 1 Unity unit
+        private float unityScaleFactor = 1.0f; // 1km = 1 Unity unit
         
         private Vector3 GetTerrainSize()
         {
@@ -48,6 +48,9 @@ namespace CAU
             TerrainData terrainData = new TerrainData();
             terrainData.heightmapResolution = heightmapResolution;
             terrainData.size = GetTerrainSize();
+            
+            // 디버깅: TerrainData 크기 로그
+            Debug.Log($"TerrainData 크기 설정: {terrainData.size} (tile_{tileX}_{tileY})");
             
             // 2. RAW 파일 읽기 (Uint16, Little Endian)
             byte[] rawBytes = File.ReadAllBytes(rawFilePath);
@@ -92,7 +95,7 @@ namespace CAU
             Terrain terrain = terrainGO.GetComponent<Terrain>();
             terrain.materialTemplate = Resources.Load<Material>("DefaultTerrain"); // 필요시 생성
             
-            Debug.Log($"Terrain 로드 완료: {terrainGO.name} at {worldPosition}");
+            Debug.Log($"Terrain 로드 완료: {terrainGO.name} at {worldPosition}, size: {terrainData.size}");
             
             return terrainGO;
         }

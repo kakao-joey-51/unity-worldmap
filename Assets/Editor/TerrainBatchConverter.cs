@@ -12,7 +12,7 @@ public class TerrainBatchConverter : EditorWindow
     {
         [Header("Conversion Settings")]
         private string sourcePath = "Assets/Terrains/";
-        private string targetPath = "Assets/Resources/TerrainData/";
+        private string targetPath = "Assets/Resources/Terrains/";
         private bool convertToAssets = true;
         private bool createPrefabs = false;
         private int maxConcurrentConversions = 4;
@@ -66,7 +66,7 @@ public class TerrainBatchConverter : EditorWindow
             
             // 변환 옵션
             EditorGUILayout.LabelField("Conversion Options", EditorStyles.boldLabel);
-            convertToAssets = EditorGUILayout.Toggle("Convert to TerrainData Assets", convertToAssets);
+            convertToAssets = EditorGUILayout.Toggle("Convert to Terrains Assets", convertToAssets);
             createPrefabs = EditorGUILayout.Toggle("Create Terrain Prefabs", createPrefabs);
             maxConcurrentConversions = EditorGUILayout.IntSlider("Max Concurrent Conversions", maxConcurrentConversions, 1, 8);
             
@@ -244,7 +244,7 @@ public class TerrainBatchConverter : EditorWindow
                 if (terrainData != null && convertToAssets)
                 {
                     // 에셋으로 저장
-                    string assetPath = $"{targetPath}/TerrainData_{tileX}_{tileY}.asset";
+                    string assetPath = $"{targetPath}/Terrain_{tileX}_{tileY}.asset";
                     AssetDatabase.CreateAsset(terrainData, assetPath);
                     
                     // 프리팹 생성 옵션
@@ -297,7 +297,7 @@ public class TerrainBatchConverter : EditorWindow
                 
                 // 에셋으로 저장하기 위해 복사본 생성
                 TerrainData assetTerrainData = Object.Instantiate(terrainData);
-                assetTerrainData.name = $"TerrainData_{tileX}_{tileY}";
+                assetTerrainData.name = $"Terrain_{tileX}_{tileY}";
                 
                 // 임시 GameObject 삭제
                 DestroyImmediate(tempTerrain);

@@ -41,11 +41,17 @@ namespace CAU
         
         private Coroutine streamingCoroutine;
         private bool isInitialized = false;
-        
+
+        // 클래스 필드 상단 어딘가에 추가
+        private int terrainLayerId = -1;
+
         #region IController Implementation
-        
+
         public void Initialize(System.Action initCompleteCallback)
         {
+            // Terrain 레이어 ID 캐싱
+            terrainLayerId = LayerMask.NameToLayer("Terrain");
+
             // TerrainLoader 컴포넌트 가져오기 또는 추가
             terrainLoader = GetComponent<TerrainLoader>();
             if (terrainLoader == null)
@@ -263,6 +269,9 @@ namespace CAU
             // 공통 처리
             if (terrainGO != null)
             {
+                // 레이어 적용 (생성 직후)
+                ApplyTerrainLayer(terrainGO);
+
                 // 실제 지리적 위치에 배치
                 Vector3 worldPosition = GetWorldPositionFromTile(tileIndex.x, tileIndex.y);
                 
@@ -279,7 +288,22 @@ namespace CAU
                 Debug.LogWarning($"타일을 로드할 수 없습니다: Tile({tileIndex.x}, {tileIndex.y})");
             }
         }
-        
+
+        private void ApplyTerrainLayer(GameObject root)
+        {
+            if (terrainLayerId < 0 || root == null) return;
+
+            // 자신
+            root.layer = terrainLayerId;
+
+            // 자식들(트리/디테일 오브젝트 등)에도 동일 레이어 적용
+            var transforms = root.GetComponentsInChildren<Transform>(true);
+            for (int i = 0; i < transforms.Length; i++)
+            {
+                transforms[i].gameObject.layer = terrainLayerId;
+            }
+        }
+
         private IEnumerator LoadTileAsync(Vector2Int tileIndex)
         {
             // 비동기 로딩 구현 (프레임 분산)

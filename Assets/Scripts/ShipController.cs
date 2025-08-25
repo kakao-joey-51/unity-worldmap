@@ -11,11 +11,15 @@ public class ShipController : MonoBehaviour
     public SimpleCameraFollower camController;
 
     // 인스펙터 창에서 배에 가할 전진/후진 힘의 크기를 조절합니다.
-    [Header("Movement Settings")]
-    public float moveForce = 500f; // '속도'가 아닌 '힘'이므로 기존보다 훨씬 큰 값이 필요할 수 있습니다.
+    //[Header("Movement Settings")]
+    //public float moveForce = 500f; // '속도'가 아닌 '힘'이므로 기존보다 훨씬 큰 값이 필요할 수 있습니다.
 
-    // 인스펙터 창에서 배에 가할 회전 힘(토크)의 크기를 조절합니다.
-    public float turnTorque = 250f;
+    //// 인스펙터 창에서 배에 가할 회전 힘(토크)의 크기를 조절합니다.
+    //public float turnTorque = 250f;
+
+    [Header("Movement Settings")]
+    public float moveSpeed = 5f;        // 전진/후진 속도
+    public float turnSpeed = 90f;       // 회전 속도 (초당 도 단위)
 
     public float angularVelocity = 1.5f; // 최대 각속도 제한, 이 값은 테스트하며 조절합니다. 이후 선박별로 값이 다를 수 있을 것이다.
 
@@ -62,6 +66,18 @@ public class ShipController : MonoBehaviour
 
         // 2. 좌회전과 우회전 입력 받기 (A, D 키 또는 왼쪽/오른쪽 방향키)
         horizontalInput = Input.GetAxis("Horizontal");
+
+        if (Mathf.Abs(verticalInput) > 0.01f)
+        {
+            Vector3 move = transform.forward * verticalInput * moveSpeed * Time.deltaTime;
+            transform.position += move;
+        }
+
+        if (Mathf.Abs(horizontalInput) > 0.01f)
+        {
+            float turn = horizontalInput * turnSpeed * Time.deltaTime;
+            transform.Rotate(Vector3.up, turn, Space.World);
+        }
     }
 
     //LateUpdate는 매 프레임이 끝나기 전 가장 마지막에 1번 호출된다. 물리 연산과 달리 주로 카메라 위치 보정에 쓰인다.
@@ -74,22 +90,23 @@ public class ShipController : MonoBehaviour
     // 고정된 시간 간격으로 호출되는 함수입니다. 물리 계산은 여기서 해야 안정적입니다.
     void FixedUpdate()
     {
-        // 3. 입력 값에 따라 배에 전진/후진 힘을 가하기
-        // AddRelativeForce는 배가 바라보는 방향(로컬 좌표계)을 기준으로 힘을 가합니다.
-        // Vector3.forward는 배의 '앞쪽' 방향입니다.
-        // ForceMode.Force는 질량(Mass)을 고려하여 힘을 가합니다.
-        if (Mathf.Abs(verticalInput) > 0.1f) // 약간의 입력에도 반응하도록
-        {
-            rb.AddRelativeForce(Vector3.forward * verticalInput * moveForce * Time.fixedDeltaTime);
-        }
 
-        // 4. 입력 값에 따라 배를 회전시키는 힘(토크)을 가하기
-        // AddTorque는 특정 축을 기준으로 회전력을 가합니다.
-        // Vector3.up은 Y축(수직축)을 기준으로 회전하겠다는 의미입니다.
-        if (Mathf.Abs(horizontalInput) > 0.1f)
-        {
-            rb.AddTorque(Vector3.up * horizontalInput * turnTorque * Time.fixedDeltaTime);
-        }
+        //// 3. 입력 값에 따라 배에 전진/후진 힘을 가하기
+        //// AddRelativeForce는 배가 바라보는 방향(로컬 좌표계)을 기준으로 힘을 가합니다.
+        //// Vector3.forward는 배의 '앞쪽' 방향입니다.
+        //// ForceMode.Force는 질량(Mass)을 고려하여 힘을 가합니다.
+        //if (Mathf.Abs(verticalInput) > 0.1f) // 약간의 입력에도 반응하도록
+        //{
+        //    rb.AddRelativeForce(Vector3.forward * verticalInput * moveForce * Time.fixedDeltaTime);
+        //}
+        //
+        //// 4. 입력 값에 따라 배를 회전시키는 힘(토크)을 가하기
+        //// AddTorque는 특정 축을 기준으로 회전력을 가합니다.
+        //// Vector3.up은 Y축(수직축)을 기준으로 회전하겠다는 의미입니다.
+        //if (Mathf.Abs(horizontalInput) > 0.1f)
+        //{
+        //    rb.AddTorque(Vector3.up * horizontalInput * turnTorque * Time.fixedDeltaTime);
+        //}
     }
 
     //public float pushBackForce = 5f; // 인스펙터에서 조절 가능한 반발력 변수 추가

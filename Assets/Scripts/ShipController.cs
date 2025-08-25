@@ -10,13 +10,6 @@ public class ShipController : MonoBehaviour
     [Header("Cam Controller")]
     public SimpleCameraFollower camController;
 
-    // 인스펙터 창에서 배에 가할 전진/후진 힘의 크기를 조절합니다.
-    //[Header("Movement Settings")]
-    //public float moveForce = 500f; // '속도'가 아닌 '힘'이므로 기존보다 훨씬 큰 값이 필요할 수 있습니다.
-
-    //// 인스펙터 창에서 배에 가할 회전 힘(토크)의 크기를 조절합니다.
-    //public float turnTorque = 250f;
-
     [Header("Movement Settings")]
     public float moveSpeed = 5f;        // 전진/후진 속도
     public float turnSpeed = 90f;       // 회전 속도 (초당 도 단위)
@@ -85,12 +78,16 @@ public class ShipController : MonoBehaviour
     {
         float deltaTime = Time.deltaTime;
         camController?.UpdateElapsedTime(deltaTime);
+
+        // 배의 위치를 강제로 물 높이에 고정합니다. (임시)
+        Vector3 currentPosition = transform.position;
+        currentPosition.y = 0f;
+        transform.position = currentPosition;
     }
 
     // 고정된 시간 간격으로 호출되는 함수입니다. 물리 계산은 여기서 해야 안정적입니다.
     void FixedUpdate()
     {
-
         //// 3. 입력 값에 따라 배에 전진/후진 힘을 가하기
         //// AddRelativeForce는 배가 바라보는 방향(로컬 좌표계)을 기준으로 힘을 가합니다.
         //// Vector3.forward는 배의 '앞쪽' 방향입니다.
@@ -109,7 +106,6 @@ public class ShipController : MonoBehaviour
         //}
     }
 
-    //public float pushBackForce = 5f; // 인스펙터에서 조절 가능한 반발력 변수 추가
     /// <summary>
     /// 다른 콜라이더와 물리적 충돌이 시작될 때 호출되는 함수입니다.
     /// </summary>
@@ -120,13 +116,6 @@ public class ShipController : MonoBehaviour
         if (collision.gameObject.layer == terrainLayerId)
         {
             Debug.Log("터레인과 충돌했습니다! (레이어 감지)");
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-
-            //Vector3 pushDirection = -collision.relativeVelocity.normalized;
-            //pushDirection.y = 0;
-            //rb.AddForce(pushDirection * pushBackForce, ForceMode.Impulse);
         }
     }
-
 }
